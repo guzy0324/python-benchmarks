@@ -10,7 +10,7 @@ from random import seed, uniform
 from shutil import copy, rmtree
 
 seed(42)
-num_files = 256
+num_files = 32
 num_workers = 16
 objs = [[[[uniform(-100, 100) for _ in range(350)] for _ in range(350)] for _ in range(10)] for _ in range(num_files)]
 
@@ -48,7 +48,7 @@ def marshal_load_func(path):
     with open(path, "rb") as f:
         marshal_load(f)
 
-def test_dump(obj):
+def test_dump():
     for obj, path in zip(objs, test["test_dump"]):
         dump_func(obj, path)
 
@@ -109,16 +109,16 @@ def test_marshal_load_process(pool: Pool):
     pool.map(marshal_load_func, test["test_marshal_load_process"])
 
 def main():
-    # test_dump()
-    # for f1, f2 in zip(test["test_dump"], test["test_load"]):
-    #     copy(f1, f2)
-    # test_load()
+    test_dump()
+    for f1, f2 in zip(test["test_dump"], test["test_load"]):
+        copy(f1, f2)
+    test_load()
 
-    # with ThreadPool(num_workers) as pool:
-    #     test_dump_thread(pool)
-    #     for f1, f2 in zip(test["test_dump_thread"], test["test_load_thread"]):
-    #         copy(f1, f2)
-    #     test_load_thread(pool)
+    with ThreadPool(num_workers) as pool:
+        test_dump_thread(pool)
+        for f1, f2 in zip(test["test_dump_thread"], test["test_load_thread"]):
+            copy(f1, f2)
+        test_load_thread(pool)
 
     with Pool(num_workers) as pool:
         test_dump_process(pool)
@@ -126,39 +126,39 @@ def main():
             copy(f1, f2)
         test_load_process(pool)
 
-    # test_opt_dump()
-    # for f1, f2 in zip(test["test_opt_dump"], test["test_opt_load"]):
-    #     copy(f1, f2)
-    # test_opt_load()
+    test_opt_dump()
+    for f1, f2 in zip(test["test_opt_dump"], test["test_opt_load"]):
+        copy(f1, f2)
+    test_opt_load()
 
-    # with ThreadPool(num_workers) as pool:
-    #     test_opt_dump_thread(pool)
-    #     for f1, f2 in zip(test["test_opt_dump_thread"], test["test_opt_load_thread"]):
-    #         copy(f1, f2)
-    #     test_opt_load_thread(pool)
+    with ThreadPool(num_workers) as pool:
+        test_opt_dump_thread(pool)
+        for f1, f2 in zip(test["test_opt_dump_thread"], test["test_opt_load_thread"]):
+            copy(f1, f2)
+        test_opt_load_thread(pool)
 
-    # with Pool(num_workers) as pool:
-    #     test_opt_dump_process(pool)
-    #     for f1, f2 in zip(test["test_opt_dump_process"], test["test_opt_load_process"]):
-    #         copy(f1, f2)
-    #     test_opt_load_process(pool)
+    with Pool(num_workers) as pool:
+        test_opt_dump_process(pool)
+        for f1, f2 in zip(test["test_opt_dump_process"], test["test_opt_load_process"]):
+            copy(f1, f2)
+        test_opt_load_process(pool)
 
-    # test_marshal_dump()
-    # for f1, f2 in zip(test["test_marshal_dump"], test["test_marshal_load"]):
-    #     copy(f1, f2)
-    # test_marshal_load()
+    test_marshal_dump()
+    for f1, f2 in zip(test["test_marshal_dump"], test["test_marshal_load"]):
+        copy(f1, f2)
+    test_marshal_load()
 
-    # with ThreadPool(num_workers) as pool:
-    #     test_marshal_dump_thread(pool)
-    #     for f1, f2 in zip(test["test_marshal_dump_thread"], test["test_marshal_load_thread"]):
-    #         copy(f1, f2)
-    #     test_marshal_load_thread(pool)
+    with ThreadPool(num_workers) as pool:
+        test_marshal_dump_thread(pool)
+        for f1, f2 in zip(test["test_marshal_dump_thread"], test["test_marshal_load_thread"]):
+            copy(f1, f2)
+        test_marshal_load_thread(pool)
 
-    # with Pool(num_workers) as pool:
-    #     test_marshal_dump_process(pool)
-    #     for f1, f2 in zip(test["test_marshal_dump_process"], test["test_marshal_load_process"]):
-    #         copy(f1, f2)
-    #     test_marshal_load_process(pool)
+    with Pool(num_workers) as pool:
+        test_marshal_dump_process(pool)
+        for f1, f2 in zip(test["test_marshal_dump_process"], test["test_marshal_load_process"]):
+            copy(f1, f2)
+        test_marshal_load_process(pool)
 
     rmtree(test_folder, ignore_errors=True)
 
